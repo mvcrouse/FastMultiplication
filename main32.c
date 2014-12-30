@@ -85,7 +85,7 @@ int main(int argc, char **argv){
           x_bits=mynbits(x);
           y_bits=mynbits(y);
           start = mytime();
-	  KaratsubaMultiply(x_address, y_address, z_address, *x_size, x_bits,
+	  Multiply(x_address, y_address, z_address, *x_size, x_bits,
                     *y_size, y_bits, z_size, z_bits);
 	  finish = mytime();
           elapsed += finish-start;

@@ -1,8 +1,8 @@
 	.file	"multiply.c"
 	.text
-.globl KaratsubaMultiply
-	.type	KaratsubaMultiply, @function
-KaratsubaMultiply:
+.globl Multiply
+	.type	Multiply, @function
+Multiply:
 .LFB19:
 	.cfi_startproc
 	pushq	%rbp
@@ -214,6 +214,6 @@ KaratsubaMultiply:
 	ret
 	.cfi_endproc
 .LFE19:
-	.size	KaratsubaMultiply, .-KaratsubaMultiply
+	.size	Multiply, .-Multiply
 	.ident	"GCC: (GNU) 4.4.7 20120313 (Red Hat 4.4.7-4)"
 	.section	.note.GNU-stack,"",@progbits

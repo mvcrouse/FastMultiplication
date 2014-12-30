@@ -11,7 +11,7 @@
 #define ORDER -1 //most significant word first, -1 for least first
 #define ENDIAN 0 // native endianness
 
-extern void KaratsubaMultiply(void *a, void *b, void *c, unsigned int wa,
+extern void Multiply(void *a, void *b, void *c, unsigned int wa,
             unsigned int ba, unsigned int wb, unsigned int bb, unsigned
             int *wc, unsigned int *bc);
 

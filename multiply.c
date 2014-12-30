@@ -4,19 +4,18 @@
 #include <gmp.h>
 #include <time.h>
 #include "multiply.h"
+#include "addition.h"
+#include "subtraction.h"
+#include "arrayExpansion.h"
 
 unsigned int* small_mult(unsigned int *int_a, unsigned int *int_b, unsigned int wa, unsigned int wb);
 unsigned int* large_mult(unsigned int *int_a, unsigned int *int_b, unsigned int wa, unsigned int wb);
 void super_large_mult(unsigned int *a, unsigned int *b, unsigned int *c, unsigned int wa,
 		unsigned int ba, unsigned int wb, unsigned int bb, unsigned int *wc, unsigned int *bc);
-unsigned int* addition(unsigned int *int_a, unsigned int *int_b, unsigned int size_a, unsigned int size_b);
-unsigned int* subtraction(unsigned int *int_c, unsigned int *int_a, unsigned int *int_b, unsigned int size_c, unsigned int size_a, unsigned int size_b);
-int* expand_array_left(unsigned int *array_a, int old_size, int new_size);
-int* expand_array_right(unsigned int *array_a, int old_size, int new_size);
 
 /* wa is word length of a, ba is bit length of a */
 //as input this takes an array of integers with each integer representing a digit, a size of each array, and a return array
-void KaratsubaMultiply(void *a, void *b, void *c, unsigned int wa,
+void Multiply(void *a, void *b, void *c, unsigned int wa,
         unsigned int ba, unsigned int wb, unsigned int bb, unsigned int *wc, unsigned int *bc){
 
   unsigned int *int_a = (unsigned int *) a;
@@ -70,113 +69,7 @@ unsigned int* small_mult(unsigned int *int_a, unsigned int *int_b, unsigned int 
     return ret_c;
 }
 
-//because digits can be up to base 32, it is necessary to have a custom addition function designed to handle
-//integer overflow
-unsigned int* addition(unsigned int *int_a, unsigned int *int_b, unsigned int size_a, unsigned int size_b) {
-  unsigned int i;
-  unsigned long long carry = 0;
-  unsigned int *int_c;
-  if (size_a > size_b) {
-    int_c = malloc((size_a + 1) * sizeof(int));
-    memset(int_c, 0, (size_a + 1) * sizeof(int));
-    for (i = 0; i < size_b; i++) {
-      carry = int_a[i];
-      carry += int_b[i];
-      int_c[i] += carry & 0xFFFFFFFF;
-      int_c[i+1] += carry >> 32;
-    }
-    for (i; i < size_a; i++) {
-      carry = int_a[i]; 
-      int_c[i] += carry & 0xFFFFFFFF;
-      int_c[i+1] += carry >> 32;
-    }
-  } else {
-    int_c = malloc((size_b + 1) * sizeof(int));
-    memset(int_c, 0, (size_b + 1) * sizeof(int));
-    for (i = 0; i < size_a; i++) {
-      carry = int_a[i];
-      carry += int_b[i];
-      int_c[i] += carry & 0xFFFFFFFF;
-      int_c[i+1] += carry >> 32;
-    }
-    for (i; i < size_b; i++) {
-      carry = int_b[i];
-      int_c[i] += carry & 0xFFFFFFFF;
-      int_c[i+1] += carry >> 32;
-    }
-  }
-  return int_c;
-}
 
-//because digits can be up to base 32, it is necessary to have a custom subtraction function designed to handle
-//integer overflow
-unsigned int* subtraction(unsigned int *int_c, unsigned int *int_a, unsigned int *int_b, unsigned int size_c, unsigned int size_a, unsigned int size_b) {
-  unsigned int i;
-  unsigned int carry;
-  if (size_a <= size_b) {
-    for (i = 0; i < size_a; i++) {
-      if (int_c[i] >= int_a[i]) {
-	int_c[i] = int_c[i] - int_a[i];
-      } else {
-	carry = 0xFFFFFFFF;
-	carry -= int_a[i];
-	carry += int_c[i] + 1;
-	int_c[i] = carry;
-	int_c[i+1] -= 1;
-      }
-      if (int_c[i] >= int_b[i]) {
-	int_c[i] = int_c[i] - int_b[i];
-      } else {
-	carry = 0xFFFFFFFF;
-	carry -= int_b[i];
-	carry += int_c[i] + 1;
-	int_c[i] = carry;
-	int_c[i+1] -= 1;
-      }
-      
-    }
-    for (i = i; i < size_b; i++) {
-      if (int_c[i] >= int_b[i]) {
-	int_c[i] -= int_b[i];
-      } else {
-	carry = 0xFFFFFFFF;
-	carry -= int_b[i];
-	carry += int_c[i] + 1;
-	int_c[i] = carry;
-	int_c[i+1] -= 1;
-      }
-    }
-  } else {
-    return subtraction(int_c, int_b, int_a, size_c, size_b, size_a);
-  }
-  return int_c;
-}
-
-//this function serves to move over digits, similarly to multplying by the base, except because the number is
-//in array format you have to handle digit movement manually
-int* expand_array_left(unsigned int *array_a, int old_size, int new_size) {
-  unsigned int *ret_a = malloc(new_size * sizeof(int));
-  memset(ret_a, 0, new_size * sizeof(int));
-  int i;
-  int j = new_size - 1;
-  
-  for (i = old_size - 1; i >= 0; i--) {
-    ret_a[j] = array_a[i];
-    j--;
-  }
-  return ret_a;
-}
-
-//this function serves to move over digits, similarly to dividing by the base, except because the number is
-//in array format you have to handle digit movement manually
-int* expand_array_right(unsigned int *array_a, int old_size, int new_size) {
-  unsigned int *ret_a = calloc(new_size, sizeof(int));
-  int i;
-  for (i = 0; i < old_size; i++) {
-    ret_a[i] = array_a[i];
-  }
-  return ret_a;
-}
 
 //implementation of karatsubas algorithm for base 32
 unsigned int* large_mult(unsigned int *int_a, unsigned int *int_b, unsigned int wa, unsigned int wb) {
