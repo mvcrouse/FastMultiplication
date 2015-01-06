@@ -1,6 +1,10 @@
-KaratsubaMultiplication
+FastMultiplication
 =======================
 
-An implementation of karatsuba's multiplication algorithm for numbers with digit size base 32. Designed for linux.
+Uses naive, Karatsuba, and Toom-Cook 3-Way for fast multiplication of 32 bit integers. Designed for Mac
 
-The only files I wrote were the multiply files, the testing and main32 were done by others
+
+To run:
+
+make all
+./test_32.sh
