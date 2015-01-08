@@ -7,6 +7,7 @@
 #include "addition.h"
 #include "subtraction.h"
 #include "arrayExpansion.h"
+#include "division.h"
 
 unsigned int* small_mult(unsigned int *int_a, unsigned int *int_b, unsigned int wa, unsigned int wb);
 unsigned int* medium_mult(unsigned int *int_a, unsigned int *int_b, unsigned int wa, unsigned int wb);
@@ -165,77 +166,115 @@ unsigned int* large_mult(unsigned int *int_a, unsigned int *int_b, unsigned int 
   unsigned int lower_b = 0;
 
   //first let's define some helpful variables that determine the size of each limb
-  if (wa - upper_a > middle_a) {
-    unsigned int largest_a = wa - upper_a + 1;
-  } else {
-    unsigned int largest_a = middle_a + 1;
-  }
+  unsigned int largest_a_1;
+  unsigned int largest_a_2;
+  unsigned int largest_b_1;
+  unsigned int largest_b_2;
 
-  if (wb - upper_b > middle_b) {
-    unsigned int largest_b = wb - upper_b + 1;
-  } else {
-    unsigned int largest_b = middle_b + 1;
-  }
+  int initial;
+  int secondary;
+
+  unsigned int *upper_part;
+  unsigned int *middle_part;
+  unsigned int *summation;
+  unsigned int *difference;
+
+  unsigned int *part_0_ab;
+  unsigned int part_0_ab_size;
+
+  unsigned int *part_1_a;
+  unsigned int *part_1_b;
+  unsigned int *part_1_ab;
+  unsigned int part_1_ab_size;
+
+  unsigned int *part_2_a;
+  unsigned int *part_2_b;
+  unsigned int *part_2_ab;
+  unsigned int part_2_ab_size;
+
+  unsigned int *part_3_a;
+  unsigned int *part_3_b;
+  unsigned int *part_3_ab;
+  unsigned int part_3_ab_size;
+
+  unsigned int *part_4_ab;
+  unsigned int part_4_ab_size;
 
   //now we go to split point 0, which is 0
-  unsigned int *part_0_ab = medium_mult(int_a, int_b, middle_a, middle_b);
-  unsigned int part_0_ab_size = middle_a + middle_b;
+  part_0_ab = medium_mult(int_a, int_b, middle_a, middle_b);
+  part_0_ab_size = middle_a + middle_b;
 
   //now we go to split point 1, which is 1
-  unsigned int *initial = { 1 };
-  unsigned int *secondary = { 1 };
+  initial = 1;
+  secondary = 1;
 
-  unsigned int *upper_part = medium_mult(&int_a[upper_a], initial, wa - upper_a, 1);
-  unsigned int *middle_part = medium_mult(&int_a[middle_a], secondary, upper_a - middle_a, 1);
-  unsigned int *summation = addition(upper_part, middle_part, wa - upper_a, upper_a - middle_a);
-  unsigned int *part_1_a = addition(middle_part, int_a, largest_a, middle_a);
+  largest_a_1 = wa - upper_a + 1 > upper_a - middle_a + 1 ? wa - upper_a + 2 : upper_a - middle_a + 2;
+  upper_part = mult_by_constant(&int_a[upper_a], initial, wa - upper_a);
+  middle_part = mult_by_constant(&int_a[middle_a], secondary, upper_a - middle_a);
+  summation = addition(upper_part, middle_part, wa - upper_a + 1, upper_a - middle_a + 1);
+  part_1_a = addition(summation, int_a, largest_a_1, middle_a);
+  largest_a_2 = largest_a_1 > middle_a ? largest_a_1 + 1 : middle_a + 1;
 
-  unsigned int *upper_part = medium_mult(&int_b[upper_b], initial, wb - upper_b, 1);
-  unsigned int *middle_part = medium_mult(&int_b[middle_b], secondary, upper_b - middle_b, 1);
-  unsigned int *summation = addition(upper_part, middle_part, wb - upper_b, upper_b - middle_b);
-  unsigned int *part_1_b = addition(middle_part, int_b, largest_b, middle_b);
+  largest_b_1 = wb - upper_b + 1 > upper_b - middle_b + 1 ? wb - upper_b + 2 : upper_b - middle_b + 2;
+  upper_part = mult_by_constant(&int_b[upper_b], initial, wb - upper_b);
+  middle_part = mult_by_constant(&int_b[middle_b], secondary, upper_b - middle_b);
+  summation = addition(upper_part, middle_part, wb - upper_b + 1, upper_b - middle_b + 1);
+  part_1_b = addition(summation, int_b, largest_b_1, middle_b);
+  largest_b_2 = largest_b_1 > middle_b ? largest_b_1 + 1 : middle_b + 1;
 
-  unsigned int *part_1_ab = medium_mult(part_4_a, part_4_b, largest_a + 1, largest_b + 1);
-  unsigned int part_1_ab_size = largest_a + largest_b + 2;
+  part_1_ab = medium_mult(part_1_a, part_1_b, largest_a_2, largest_b_2);
+  part_1_ab_size = largest_a_2 + largest_b_2;
 
   //now we go to split point 2, which is -1
-  unsigned int *initial = { 1 };
-  unsigned int *secondary = { -1 };
+  initial = 1;
+  secondary = 1;
 
-  unsigned int *upper_part = medium_mult(&int_a[upper_a], initial, wa - upper_a, 1);
-  unsigned int *middle_part = medium_mult(&int_a[middle_a], secondary, upper_a - middle_a, 1);
-  unsigned int *summation = addition(upper_part, middle_part, wa - upper_a, upper_a - middle_a);
-  unsigned int *part_2_a = addition(middle_part, int_a, largest_a, middle_a);
+  largest_a_1 = wa - upper_a + 1 > middle_a ? wa - upper_a + 2 : middle_a + 1;
+  upper_part = mult_by_constant(&int_a[upper_a], initial, wa - upper_a);
+  middle_part = mult_by_constant(&int_a[middle_a], secondary, upper_a - middle_a);
+  summation = addition(upper_part, int_a, wa - upper_a + 1, middle_a);
+  difference = subtraction(summation, middle_part, largest_a_1, upper_a - middle_a + 1);
+  part_2_a = difference;
+  largest_a_2 = largest_a_1 > upper_a - middle_a + 1 ? largest_a_1 + 1 : upper_a - middle_a + 2;
 
-  unsigned int *upper_part = medium_mult(&int_b[upper_b], initial, wb - upper_b, 1);
-  unsigned int *middle_part = medium_mult(&int_b[middle_b], secondary, upper_b - middle_b, 1);
-  unsigned int *summation = addition(upper_part, middle_part, wb - upper_b, upper_b - middle_b);
-  unsigned int *part_2_b = addition(middle_part, int_b, largest_b, middle_b);
+  largest_b_1 = wb - upper_b + 1 > middle_b ? wb - upper_b + 2 : middle_b + 1;
+  upper_part = mult_by_constant(&int_b[upper_b], initial, wb - upper_b);
+  middle_part = mult_by_constant(&int_b[middle_b], secondary, upper_b - middle_b);
+  summation = addition(upper_part, int_b, wb - upper_b + 1, middle_b);
+  difference = subtraction(summation, middle_part, largest_b_1, upper_b - middle_b + 1);
+  part_2_b = difference;
+  largest_b_2 = largest_b_1 > upper_b - middle_b + 1 ? largest_b_1 + 1 : upper_b - middle_b + 2;
 
-  unsigned int *part_2_ab = medium_mult(part_2_a, part_2_b, largest_a + 1, largest_b + 1);
-  unsigned int part_2_ab_size = largest_a + largest_b + 2;
+  part_2_ab = medium_mult(part_2_a, part_2_b, largest_a_2, largest_b_2);
+  part_2_ab_size = largest_a_2 + largest_b_2;
 
   //now the goal is to generate the product of the three limbs with each of the split points
   //we begin with split point 1, which is -2
-  unsigned int *initial = { 4 };
-  unsigned int *secondary = { -2 };
+  initial = 4;
+  secondary = 2;
 
-  unsigned int *upper_part = medium_mult(&int_a[upper_a], initial, wa - upper_a, 1);
-  unsigned int *middle_part = medium_mult(&int_a[middle_a], secondary, upper_a - middle_a, 1);
-  unsigned int *summation = addition(upper_part, middle_part, wa - upper_a, upper_a - middle_a);
-  unsigned int *part_3_a = addition(middle_part, int_a, largest_a, middle_a);
+  largest_a_1 = wa - upper_a + 1 > middle_a ? wa - upper_a + 2 : middle_a + 1;  
+  upper_part = mult_by_constant(&int_a[upper_a], initial, wa - upper_a);
+  middle_part = mult_by_constant(&int_a[middle_a], secondary, upper_a - middle_a);
+  summation = addition(upper_part, int_a, wa - upper_a + 1, middle_a);
+  difference = subtraction(summation, middle_part, largest_a_1, upper_a - middle_a + 1);
+  part_3_a = difference;
+  largest_a_2 = largest_a_1 > upper_a - middle_a + 1 ? largest_a_1 : upper_a - middle_a + 1;
 
-  unsigned int *upper_part = medium_mult(&int_b[upper_b], initial, wb - upper_b, 1);
-  unsigned int *middle_part = medium_mult(&int_b[middle_b], secondary, upper_b - middle_b, 1);
-  unsigned int *summation = addition(upper_part, middle_part, wb - upper_b, upper_b - middle_b);
-  unsigned int *part_3_b = addition(middle_part, int_b, largest_b, middle_b);
+  largest_b_1 = wb - upper_b + 1 > middle_b ? wb - upper_b + 2 : middle_b + 1;
+  upper_part = mult_by_constant(&int_b[upper_b], initial, wb - upper_b);
+  middle_part = mult_by_constant(&int_b[middle_b], secondary, upper_b - middle_b);
+  summation = addition(upper_part, int_b, wb - upper_b + 1, middle_b);
+  difference = subtraction(summation, middle_part, largest_b_1, upper_b - middle_b + 1);
+  part_3_b = difference;
+  largest_b_2 = largest_b_1 > upper_b - middle_b + 1 ? largest_b_1 + 1: upper_b - middle_b + 2;
 
-  unsigned int *part_3_ab = medium_mult(part_1_a, part_1_b, largest_a + 1, largest_b + 1);
-  unsigned int part_3_ab_size = largest_a + largest_b + 2;
+  part_3_ab = medium_mult(part_3_a, part_3_b, largest_a_2, largest_b_2);
+  part_3_ab_size = largest_a_2 + largest_b_2;
 
   //now we go to split point 5, which is the largest 2 limbs
-  unsigned int *part_4_ab = medium_mult(&int_a[upper_a], &int_b[upper_b], wa - upper_a, wb - upper_b);
-  unsigned int part_4_ab_size = wa - upper_a + wb - upper_b;
+  part_4_ab = medium_mult(&int_a[upper_a], &int_b[upper_b], wa - upper_a, wb - upper_b);
+  part_4_ab_size = wa - upper_a + wb - upper_b;
 
   //now that we have found all 5 points, we have 5 linear equations to solve to get the final points p1, p2, p3, p4, p5
   unsigned int *p0 = part_0_ab;
@@ -246,16 +285,24 @@ unsigned int* large_mult(unsigned int *int_a, unsigned int *int_b, unsigned int 
   
   unsigned int *p3 = subtraction(part_3_ab, part_1_ab, part_3_ab_size, part_1_ab_size);
   unsigned int p3_size = part_3_ab_size > part_1_ab_size ? part_3_ab_size : part_1_ab_size;
+  p3 = div_3(p3, p3_size);
 
   unsigned int *p1 = subtraction(part_1_ab, part_2_ab, part_1_ab_size, part_2_ab_size);
   unsigned int p1_size = part_1_ab_size > part_2_ab_size ? part_1_ab_size : part_2_ab_size;
+  p1 = div_2(p1, p1_size);
 
   unsigned int *p2 = subtraction(part_2_ab, p0, part_2_ab_size, p0_size);
   unsigned int p2_size = part_2_ab_size > p0_size ? part_2_ab_size : p0_size;
 
+  unsigned int *psub;
+
   p3 = subtraction(p2, p3, p2_size, p3_size);
   p3_size = p2_size > p3_size ? p2_size : p3_size;
-  
+  p3 = div_2(p3, p3_size);
+  psub = mult_by_constant(p4, 2, p4_size);
+  p3 = addition(p3, psub, p3_size, p4_size + 1);
+  p3_size = p3_size > p4_size + 1 ? p3_size : p4_size + 1;
+
   p2 = addition(p2, p1, p2_size, p1_size);
   p2_size = p2_size > p1_size ? p2_size : p1_size;
   p2 = subtraction(p2, p4, p2_size, p4_size);

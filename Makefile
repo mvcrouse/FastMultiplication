@@ -3,9 +3,8 @@ OPT= -O
 
 all: main32
 
-main32: main32.o multiply.o myutil.o addition.o subtraction.o arrayExpansion.o
-	gcc-4.8 $(OPT) -o main32 main32.o multiply.o myutil.o addition.o subtraction.o arrayExpansion.o -lgmp
-# -lrt
+main32: main32.o multiply.o myutil.o addition.o subtraction.o division.o arrayExpansion.o
+	gcc-4.8 $(OPT) -o main32 main32.o multiply.o myutil.o addition.o subtraction.o division.o arrayExpansion.o -lgmp
 
 main32.o: main32.c multiply.h
 	gcc-4.8 $(OPT) -c main32.c
@@ -21,6 +20,9 @@ addition.o: addition.c addition.h
 
 subtraction.o: subtraction.c subtraction.h
 	gcc-4.8 $(OPT) -c subtraction.c
+
+division.o: division.c division.h
+	gcc-4.8 $(OPT) -c division.c
 
 arrayExpansion.o: arrayExpansion.c arrayExpansion.h
 	gcc-4.8 $(OPT) -c arrayExpansion.c
