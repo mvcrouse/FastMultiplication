@@ -177,10 +177,13 @@ unsigned int* large_mult(unsigned int *int_a, unsigned int *int_b, unsigned int 
     unsigned int largest_b = middle_b + 1;
   }
 
-  //now the goal is to generate the product of the three limbs with each of the split points
-  //we begin with split point 1, which is -2
-  unsigned int *initial = { 4 };
-  unsigned int *secondary = { -2 };
+  //now we go to split point 0, which is 0
+  unsigned int *part_0_ab = medium_mult(int_a, int_b, middle_a, middle_b);
+  unsigned int part_0_ab_size = middle_a + middle_b;
+
+  //now we go to split point 1, which is 1
+  unsigned int *initial = { 1 };
+  unsigned int *secondary = { 1 };
 
   unsigned int *upper_part = medium_mult(&int_a[upper_a], initial, wa - upper_a, 1);
   unsigned int *middle_part = medium_mult(&int_a[middle_a], secondary, upper_a - middle_a, 1);
@@ -192,7 +195,7 @@ unsigned int* large_mult(unsigned int *int_a, unsigned int *int_b, unsigned int 
   unsigned int *summation = addition(upper_part, middle_part, wb - upper_b, upper_b - middle_b);
   unsigned int *part_1_b = addition(middle_part, int_b, largest_b, middle_b);
 
-  unsigned int *part_1_ab = medium_mult(part_1_a, part_1_b, largest_a + 1, largest_b + 1);
+  unsigned int *part_1_ab = medium_mult(part_4_a, part_4_b, largest_a + 1, largest_b + 1);
   unsigned int part_1_ab_size = largest_a + largest_b + 2;
 
   //now we go to split point 2, which is -1
@@ -212,9 +215,10 @@ unsigned int* large_mult(unsigned int *int_a, unsigned int *int_b, unsigned int 
   unsigned int *part_2_ab = medium_mult(part_2_a, part_2_b, largest_a + 1, largest_b + 1);
   unsigned int part_2_ab_size = largest_a + largest_b + 2;
 
-  //now we go to split point 3, which is 1
-  unsigned int *initial = { 1 };
-  unsigned int *secondary = { 1 };
+  //now the goal is to generate the product of the three limbs with each of the split points
+  //we begin with split point 1, which is -2
+  unsigned int *initial = { 4 };
+  unsigned int *secondary = { -2 };
 
   unsigned int *upper_part = medium_mult(&int_a[upper_a], initial, wa - upper_a, 1);
   unsigned int *middle_part = medium_mult(&int_a[middle_a], secondary, upper_a - middle_a, 1);
@@ -226,32 +230,39 @@ unsigned int* large_mult(unsigned int *int_a, unsigned int *int_b, unsigned int 
   unsigned int *summation = addition(upper_part, middle_part, wb - upper_b, upper_b - middle_b);
   unsigned int *part_3_b = addition(middle_part, int_b, largest_b, middle_b);
 
-  unsigned int *part_3_ab = medium_mult(part_4_a, part_4_b, largest_a + 1, largest_b + 1);
+  unsigned int *part_3_ab = medium_mult(part_1_a, part_1_b, largest_a + 1, largest_b + 1);
   unsigned int part_3_ab_size = largest_a + largest_b + 2;
 
-  //now we go to split point 4, which is 0
-  unsigned int *part_4_ab = medium_mult(int_a, int_b, middle_a, middle_b);
-  unsigned int part_4_ab_size = middle_a + middle_b;
-
   //now we go to split point 5, which is the largest 2 limbs
-  unsigned int *part_5_ab = medium_mult(&int_a[upper_a], &int_b[upper_b], wa - upper_a, wb - upper_b);
-  unsigned int part_5_ab_size = wa - upper_a + wb - upper_b;
+  unsigned int *part_4_ab = medium_mult(&int_a[upper_a], &int_b[upper_b], wa - upper_a, wb - upper_b);
+  unsigned int part_4_ab_size = wa - upper_a + wb - upper_b;
 
   //now that we have found all 5 points, we have 5 linear equations to solve to get the final points p1, p2, p3, p4, p5
-  unsigned int *p1 = ;
-  unsigned int p1_size = part_1_ab_size;
-
-  unsigned int *p2 = ;
-  unsigned int p2_size = part_2_ab_size;
-
-  unsigned int *p3 = ;
-  unsigned int p3_size = part_3_ab_size;
+  unsigned int *p0 = part_0_ab;
+  unsigned int p0_size = part_0_ab_size;
 
   unsigned int *p4 = part_4_ab;
   unsigned int p4_size = part_4_ab_size;
+  
+  unsigned int *p3 = subtraction(part_3_ab, part_1_ab, part_3_ab_size, part_1_ab_size);
+  unsigned int p3_size = part_3_ab_size > part_1_ab_size ? part_3_ab_size : part_1_ab_size;
 
-  unsigned int *p5 = part_5_ab;
-  unsigned int p5_size = part_5_ab_size;
+  unsigned int *p1 = subtraction(part_1_ab, part_2_ab, part_1_ab_size, part_2_ab_size);
+  unsigned int p1_size = part_1_ab_size > part_2_ab_size ? part_1_ab_size : part_2_ab_size;
+
+  unsigned int *p2 = subtraction(part_2_ab, p0, part_2_ab_size, p0_size);
+  unsigned int p2_size = part_2_ab_size > p0_size ? part_2_ab_size : p0_size;
+
+  p3 = subtraction(p2, p3, p2_size, p3_size);
+  p3_size = p2_size > p3_size ? p2_size : p3_size;
+  
+  p2 = addition(p2, p1, p2_size, p1_size);
+  p2_size = p2_size > p1_size ? p2_size : p1_size;
+  p2 = subtraction(p2, p4, p2_size, p4_size);
+  p2_size = p2_size > p4_size ? p2_size : p4_size;
+
+  p1 = subtraction(p1, p3, p1_size, p3_size);
+  p1_size = p1_size > p3_size ? p1_size : p3_size;
 
   //now we simply recombine all 5 points together
   p4 = expand_array_left(p4, p4_size, wc);
