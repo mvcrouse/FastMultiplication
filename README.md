@@ -7,4 +7,5 @@ Uses naive, Karatsuba, and Toom-Cook 3-Way for fast multiplication of integers w
 To run:
 
 make all
+
 ./test_32.sh
