@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#include <gmp.h>
+//#include <gmp.h>
 #include <time.h>
 #include "multiply.h"
 #include "addition.h"
@@ -144,6 +144,7 @@ unsigned int* medium_mult(unsigned int *int_a, unsigned int *int_b, unsigned int
 }
 
 unsigned int* large_mult(unsigned int *int_a, unsigned int *int_b, unsigned int wa, unsigned int wb) {
+  //this function is still a work in progress so it is not yet hooked up to anything
 
   int i;
   int j;
@@ -209,15 +210,15 @@ unsigned int* large_mult(unsigned int *int_a, unsigned int *int_b, unsigned int 
   secondary = 1;
 
   largest_a_1 = wa - upper_a + 1 > upper_a - middle_a + 1 ? wa - upper_a + 2 : upper_a - middle_a + 2;
-  upper_part = mult_by_constant(&int_a[upper_a], initial, wa - upper_a);
-  middle_part = mult_by_constant(&int_a[middle_a], secondary, upper_a - middle_a);
+  //upper_part = mult_by_constant(&int_a[upper_a], initial, wa - upper_a);
+  //middle_part = mult_by_constant(&int_a[middle_a], secondary, upper_a - middle_a);
   summation = addition(upper_part, middle_part, wa - upper_a + 1, upper_a - middle_a + 1);
   part_1_a = addition(summation, int_a, largest_a_1, middle_a);
   largest_a_2 = largest_a_1 > middle_a ? largest_a_1 + 1 : middle_a + 1;
 
   largest_b_1 = wb - upper_b + 1 > upper_b - middle_b + 1 ? wb - upper_b + 2 : upper_b - middle_b + 2;
-  upper_part = mult_by_constant(&int_b[upper_b], initial, wb - upper_b);
-  middle_part = mult_by_constant(&int_b[middle_b], secondary, upper_b - middle_b);
+  //  upper_part = mult_by_constant(&int_b[upper_b], initial, wb - upper_b);
+  //middle_part = mult_by_constant(&int_b[middle_b], secondary, upper_b - middle_b);
   summation = addition(upper_part, middle_part, wb - upper_b + 1, upper_b - middle_b + 1);
   part_1_b = addition(summation, int_b, largest_b_1, middle_b);
   largest_b_2 = largest_b_1 > middle_b ? largest_b_1 + 1 : middle_b + 1;
@@ -230,18 +231,18 @@ unsigned int* large_mult(unsigned int *int_a, unsigned int *int_b, unsigned int 
   secondary = 1;
 
   largest_a_1 = wa - upper_a + 1 > middle_a ? wa - upper_a + 2 : middle_a + 1;
-  upper_part = mult_by_constant(&int_a[upper_a], initial, wa - upper_a);
-  middle_part = mult_by_constant(&int_a[middle_a], secondary, upper_a - middle_a);
+  //upper_part = mult_by_constant(&int_a[upper_a], initial, wa - upper_a);
+  //middle_part = mult_by_constant(&int_a[middle_a], secondary, upper_a - middle_a);
   summation = addition(upper_part, int_a, wa - upper_a + 1, middle_a);
-  difference = subtraction(summation, middle_part, largest_a_1, upper_a - middle_a + 1);
+  //difference = subtraction(summation, middle_part, largest_a_1, upper_a - middle_a + 1);
   part_2_a = difference;
   largest_a_2 = largest_a_1 > upper_a - middle_a + 1 ? largest_a_1 + 1 : upper_a - middle_a + 2;
 
   largest_b_1 = wb - upper_b + 1 > middle_b ? wb - upper_b + 2 : middle_b + 1;
-  upper_part = mult_by_constant(&int_b[upper_b], initial, wb - upper_b);
-  middle_part = mult_by_constant(&int_b[middle_b], secondary, upper_b - middle_b);
+  //upper_part = mult_by_constant(&int_b[upper_b], initial, wb - upper_b);
+  //middle_part = mult_by_constant(&int_b[middle_b], secondary, upper_b - middle_b);
   summation = addition(upper_part, int_b, wb - upper_b + 1, middle_b);
-  difference = subtraction(summation, middle_part, largest_b_1, upper_b - middle_b + 1);
+  //difference = subtraction(summation, middle_part, largest_b_1, upper_b - middle_b + 1);
   part_2_b = difference;
   largest_b_2 = largest_b_1 > upper_b - middle_b + 1 ? largest_b_1 + 1 : upper_b - middle_b + 2;
 
@@ -254,18 +255,18 @@ unsigned int* large_mult(unsigned int *int_a, unsigned int *int_b, unsigned int 
   secondary = 2;
 
   largest_a_1 = wa - upper_a + 1 > middle_a ? wa - upper_a + 2 : middle_a + 1;  
-  upper_part = mult_by_constant(&int_a[upper_a], initial, wa - upper_a);
-  middle_part = mult_by_constant(&int_a[middle_a], secondary, upper_a - middle_a);
+  //upper_part = mult_by_constant(&int_a[upper_a], initial, wa - upper_a);
+  //middle_part = mult_by_constant(&int_a[middle_a], secondary, upper_a - middle_a);
   summation = addition(upper_part, int_a, wa - upper_a + 1, middle_a);
-  difference = subtraction(summation, middle_part, largest_a_1, upper_a - middle_a + 1);
+  //difference = subtraction(summation, middle_part, largest_a_1, upper_a - middle_a + 1);
   part_3_a = difference;
   largest_a_2 = largest_a_1 > upper_a - middle_a + 1 ? largest_a_1 : upper_a - middle_a + 1;
 
   largest_b_1 = wb - upper_b + 1 > middle_b ? wb - upper_b + 2 : middle_b + 1;
-  upper_part = mult_by_constant(&int_b[upper_b], initial, wb - upper_b);
-  middle_part = mult_by_constant(&int_b[middle_b], secondary, upper_b - middle_b);
+  //upper_part = mult_by_constant(&int_b[upper_b], initial, wb - upper_b);
+  //middle_part = mult_by_constant(&int_b[middle_b], secondary, upper_b - middle_b);
   summation = addition(upper_part, int_b, wb - upper_b + 1, middle_b);
-  difference = subtraction(summation, middle_part, largest_b_1, upper_b - middle_b + 1);
+  //difference = subtraction(summation, middle_part, largest_b_1, upper_b - middle_b + 1);
   part_3_b = difference;
   largest_b_2 = largest_b_1 > upper_b - middle_b + 1 ? largest_b_1 + 1: upper_b - middle_b + 2;
 
@@ -283,32 +284,32 @@ unsigned int* large_mult(unsigned int *int_a, unsigned int *int_b, unsigned int 
   unsigned int *p4 = part_4_ab;
   unsigned int p4_size = part_4_ab_size;
   
-  unsigned int *p3 = subtraction(part_3_ab, part_1_ab, part_3_ab_size, part_1_ab_size);
+  unsigned int *p3;// = subtraction(part_3_ab, part_1_ab, part_3_ab_size, part_1_ab_size);
   unsigned int p3_size = part_3_ab_size > part_1_ab_size ? part_3_ab_size : part_1_ab_size;
   p3 = div_3(p3, p3_size);
 
-  unsigned int *p1 = subtraction(part_1_ab, part_2_ab, part_1_ab_size, part_2_ab_size);
+  unsigned int *p1;// = subtraction(part_1_ab, part_2_ab, part_1_ab_size, part_2_ab_size);
   unsigned int p1_size = part_1_ab_size > part_2_ab_size ? part_1_ab_size : part_2_ab_size;
   p1 = div_2(p1, p1_size);
 
-  unsigned int *p2 = subtraction(part_2_ab, p0, part_2_ab_size, p0_size);
+  unsigned int *p2;// = subtraction(part_2_ab, p0, part_2_ab_size, p0_size);
   unsigned int p2_size = part_2_ab_size > p0_size ? part_2_ab_size : p0_size;
 
   unsigned int *psub;
 
-  p3 = subtraction(p2, p3, p2_size, p3_size);
+  //  p3 = subtraction(p2, p3, p2_size, p3_size);
   p3_size = p2_size > p3_size ? p2_size : p3_size;
   p3 = div_2(p3, p3_size);
-  psub = mult_by_constant(p4, 2, p4_size);
+  //psub = mult_by_constant(p4, 2, p4_size);
   p3 = addition(p3, psub, p3_size, p4_size + 1);
   p3_size = p3_size > p4_size + 1 ? p3_size : p4_size + 1;
 
   p2 = addition(p2, p1, p2_size, p1_size);
   p2_size = p2_size > p1_size ? p2_size : p1_size;
-  p2 = subtraction(p2, p4, p2_size, p4_size);
+  //  p2 = subtraction(p2, p4, p2_size, p4_size);
   p2_size = p2_size > p4_size ? p2_size : p4_size;
 
-  p1 = subtraction(p1, p3, p1_size, p3_size);
+  //  p1 = subtraction(p1, p3, p1_size, p3_size);
   p1_size = p1_size > p3_size ? p1_size : p3_size;
 
   //now we simply recombine all 5 points together
@@ -351,7 +352,7 @@ unsigned int* large_mult(unsigned int *int_a, unsigned int *int_b, unsigned int 
   unsigned int *mid_c = large_mult(add_a, add_b, mid_size_a, mid_size_b);
   unsigned int mid_size = mid_size_a + mid_size_b;
 
-  unsigned int *sub_components = subtraction(mid_c, upper_c, lower_c, mid_size, upper_bound_a + upper_bound_b, upper_a + upper_b);
+  unsigned int *sub_components;// = subtraction(mid_c, upper_c, lower_c, mid_size, upper_bound_a + upper_bound_b, upper_a + upper_b);
 
   //separating components into their respective "slots"
   unsigned int upper_limit = wa + wb;

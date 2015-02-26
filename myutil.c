@@ -1,10 +1,10 @@
 #include <mach/mach_time.h>
 #include <time.h>
-#include <gmp.h>
+//#include <gmp.h>
 #include <stdio.h>
 #define __STDC_FORMAT_MACROS
 #include <inttypes.h>
-
+#include <string.h>
 #ifdef __MACH__
 #include <sys/time.h>
 //clock_gettime is not implemented on OSX
@@ -30,7 +30,8 @@ double mytime (void)
 
     return(timing);
 };
-
+/*
 int mynbits (mpz_t x) {
   return mpz_sizeinbase(x,2);
 }
+*/
