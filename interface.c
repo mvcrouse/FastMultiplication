@@ -3,8 +3,6 @@ This file is where you should call your multiplications
 */
 #include <stdio.h>
 #include "multiply.h"
-#include <string.h>
-#include <limits.h>
 
 int main() {
 
