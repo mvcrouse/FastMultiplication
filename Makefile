@@ -1,27 +1,17 @@
 OPT= -O 
-#-m32
 
 CC = gcc-4.8
 
-all: interface #main32
+all: interface
 
-interface: interface.o multiply.o myutil.o addition.o subtraction.o division.o arrayExpansion.o
-	$(CC) $(OPT) -o interface interface.o multiply.o myutil.o addition.o subtraction.o division.o arrayExpansion.o -lgmp
-
-main32: main32.o multiply.o myutil.o addition.o subtraction.o division.o arrayExpansion.o
-	$(CC) $(OPT) -o main32 main32.o multiply.o myutil.o addition.o subtraction.o division.o arrayExpansion.o -lgmp
-
-main32.o: main32.c multiply.h
-	$(CC) $(OPT) -c main32.c
+interface: interface.o multiply.o addition.o subtraction.o division.o arrayExpansion.o
+	$(CC) $(OPT) -w -o result interface.o multiply.o addition.o subtraction.o division.o arrayExpansion.o
 
 interface.o: interface.c multiply.h
 	$(CC) $(OPT) -c interface.c
 
 multiply.o: multiply.c multiply.h
 	$(CC) $(OPT) -c multiply.c
-
-myutil.o: myutil.c
-	$(CC) $(OPT) -c myutil.c
 
 addition.o: addition.c addition.h
 	$(CC) $(OPT) -c addition.c
@@ -41,4 +31,4 @@ clean:
 clear:
 	rm *~
 	rm *.o main32
-
+	rm result

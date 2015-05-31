@@ -1,13 +1,20 @@
+=======================
 FastMultiplication
 =======================
 
-Uses naive, Karatsuba, and Toom-Cook 3-Way for fast multiplication of integers with size 32 bit digits. Designed for Mac
+Uses naive, Karatsuba, and hopefully at some point Toom-Cook 3-Way for fast multiplication of 2
+integers. Works for any number from base 2 to base 4,294,967,295. Designed for Mac
 
-It may require GMP, so if that's the case and you don't have it installed, the multiply, add, subtract, and divide files
-all are fine on their own, so just remove any instances where GMP is called
+=======================
+TO USE
+=======================
 
-To run:
+  1. Go into interface.c
 
-make all
+  2. Change numbers to what you want them to be
 
-./test_32.sh
+  3. Specify the base (works for anything from base 2 to base 4,294,967,295)
+
+  4. Run "make all"
+
+  5. Call "./result"

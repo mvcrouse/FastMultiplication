@@ -13,7 +13,7 @@
 
 extern void Multiply(void *a, void *b, void *c, unsigned int wa,
             unsigned int ba, unsigned int wb, unsigned int bb, unsigned
-            int *wc, unsigned int *bc);
+		     int *wc, unsigned int *bc, unsigned int base);
 
 extern double mytime (void);
 
