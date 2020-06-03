@@ -6,7 +6,7 @@ Uses naive, Karatsuba, and hopefully at some point Toom-Cook 3-Way for fast mult
 integers. Works for any number from base 2 to base 4,294,967,295. Designed for Mac.
 
 
-TO USE
+Instructions
 =======================
 
   1. Go into interface.c
